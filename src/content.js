@@ -1,3 +1,11 @@
+// Section 1: Logging & Setup
+
+
+
+
+
+
+
 // Section 2: Image Detection
 function findImagesMissingAlt() {
     // finds images without alt text or with empty alt attributes
@@ -7,8 +15,13 @@ function findImagesMissingAlt() {
     // Returns a NodeList of those elements.
     const images = document.querySelectorAll(selector);
 
+    // calls logging function to log how many images were found
     log(`Found ${images.length} images missing alt text.`);
+
+    // returns the NodeList of images
     return images;
+
+    
 }
 
 // Section 3: Generating ALT Text
@@ -53,3 +66,23 @@ async function addAIGeneratedAlt(images) {
             log('Error loading AI model:', error);
         }
     }
+
+// Main function
+async function main() {
+    log('ALT-text Generator started');
+    const images = findImagesMissingAlt();
+    
+    if (images.length > 0) {
+        await addAIGeneratedAlt(images);
+        log('Finished processing images');
+    } else {
+        log('No images missing alt text found');
+    }
+}
+
+// Run when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
