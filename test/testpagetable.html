@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Table Scroll Test</h1>
+    
+    <h2>Wide Table (should get scroll)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Column 1</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+                <th>Column 4</th>
+                <th>Column 5</th>
+                <th>Column 6</th>
+                <th>Column 7</th>
+                <th>Column 8</th>
+                <th>Column 9</th>
+                <th>Column 10</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Data 1</td>
+                <td>Some longer data here</td>
+                <td>Data 3</td>
+                <td>Even more data content</td>
+                <td>Data 5</td>
+                <td>Data 6</td>
+                <td>Data 7</td>
+                <td>Data 8</td>
+                <td>Data 9</td>
+                <td>Final column data</td>
+            </tr>
+            <tr>
+                <td>Row 2 Data 1</td>
+                <td>Row 2 Data 2</td>
+                <td>Row 2 Data 3</td>
+                <td>Row 2 Data 4</td>
+                <td>Row 2 Data 5</td>
+                <td>Row 2 Data 6</td>
+                <td>Row 2 Data 7</td>
+                <td>Row 2 Data 8</td>
+                <td>Row 2 Data 9</td>
+                <td>Row 2 Data 10</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Small Table (should be left alone)</h2>
+    <table style="width: 300px;">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td>John</td>
+            <td>25</td>
+        </tr>
+    </table>
+
+    <h2>Images (for alt text testing)</h2>
+    <img src="https://picsum.photos/200/150">
+    <img src="https://picsum.photos/200/151" alt="">
+</body>
+</html>
