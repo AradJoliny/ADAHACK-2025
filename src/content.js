@@ -1,10 +1,7 @@
 // Section 1: Logging & Setup
-
-
-
-
-
-
+function log(message) {
+    console.log('[ALT-text Generator]:', message);
+}
 
 // Section 2: Image Detection
 function findImagesMissingAlt() {
@@ -20,19 +17,11 @@ function findImagesMissingAlt() {
 
     // returns the NodeList of images
     return images;
-
-    
 }
 
 // Section 3: Generating ALT Text
-function log(message) {
-    console.log('[ALT-text Generator]:', message);
-}
-
 async function addAIGeneratedAlt(images) {
     try {
-
-        
         // wait for transformers library to load/be available
         if (typeof transformers === 'undefined') {
             log('Waiting for transformers library to load...');
@@ -40,15 +29,16 @@ async function addAIGeneratedAlt(images) {
                 const checkTransformers = () => {
                     if (typeof transformers !== 'undefined') {
                         resolve();
-                } else {
-                    setTimeout(checkTransformers, 100);
-                }
-            };
-            checkTransformers();
-        });
-    }
+                    } else {
+                        setTimeout(checkTransformers, 100);
+                    }
+                };
+                checkTransformers();
+            });
+        }
+        
         log('Loading AI model...');
-        const captioner = await transformers.pipeline('image-to-text', 'Xenova/all-mini-image-captioning');
+        const captioner = await transformers.pipeline('image-to-text', 'Xenova/vit-gpt2-image-captioning');
 
         for (let img of images) {
             try {
@@ -63,9 +53,9 @@ async function addAIGeneratedAlt(images) {
             }
         } 
     } catch (error) {
-            log('Error loading AI model:', error);
-        }
+        log('Error loading AI model:', error);
     }
+}
 
 // Main function
 async function main() {

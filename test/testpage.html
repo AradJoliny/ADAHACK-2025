@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .gallery img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>My Photo Gallery</h1>
+    <div class="gallery">
+        <img src="https://picsum.photos/id/1015/200/150" alt="river">
+        <img src="https://picsum.photos/id/1025/200/150" alt="">
+        <img src="https://picsum.photos/id/1035/200/150" alt="Waterfall">
+        <img src="https://picsum.photos/id/1045/200/150" >
+    </div>
+</body>
+</html>
