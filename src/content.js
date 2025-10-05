@@ -7,6 +7,17 @@ function log(message) {
     console.log('[ALT-text Generator]:', message);
 }
 
+function ensureImageIds() {
+    // keep a simple counter on window to avoid collisions between runs
+    if (!window.__aiAltIdCounter) window.__aiAltIdCounter = 1;
+    const imgs = document.querySelectorAll('img');
+    imgs.forEach(img => {
+        if (!img.dataset.altId) {
+            img.dataset.altId = 'aiimg-' + (window.__aiAltIdCounter++);
+        }
+    });
+}
+
 // Find images missing alt text
 function findImagesMissingAlt() {
     // Select images without alt or with empty/whitespace alt
@@ -110,6 +121,14 @@ async function addAIGeneratedAlt(images) {
 async function buildProposals({ onlyMissingAlt = true } = {}) {
     const images = onlyMissingAlt ? findImagesMissingAlt() : Array.from(document.querySelectorAll('img'));
     ensureImageIds();
+
+    // helper: timeout wrapper to avoid blocking the popup
+    function withTimeout(promise, ms) {
+        return Promise.race([
+            promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+        ]);
+    }
 
     const proposals = [];
     for (const img of images) {
