@@ -7,6 +7,17 @@ function log(message) {
     console.log('[ALT-text Generator]:', message);
 }
 
+function ensureImageIds() {
+    // keep a simple counter on window to avoid collisions between runs
+    if (!window.__aiAltIdCounter) window.__aiAltIdCounter = 1;
+    const imgs = document.querySelectorAll('img');
+    imgs.forEach(img => {
+        if (!img.dataset.altId) {
+            img.dataset.altId = 'aiimg-' + (window.__aiAltIdCounter++);
+        }
+    });
+}
+
 // Find images missing alt text
 function findImagesMissingAlt() {
     // Select images without alt or with empty/whitespace alt

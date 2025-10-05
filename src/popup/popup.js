@@ -32,7 +32,7 @@ async function loadProposals() {
     }
     const proposals = response?.proposals || [];
     if (!proposals.length) {
-      statusEl.textContent = 'No images found on this page.';
+      statusEl.textContent = 'No images found on this page or all images have alt text.';
       return;
     }
     statusEl.textContent = `Found ${proposals.length} image(s).`;
@@ -78,3 +78,15 @@ function renderList(proposals) {
   });
 }
 
+function truncateUrl(url, maxLength = 60) {
+  if (!url) return '';
+  try {
+    const u = new URL(url, window.location.href);
+    const compact = u.hostname + u.pathname.replace(/\/+/g, '/');
+    if (compact.length <= maxLength) return compact;
+    return compact.slice(0, maxLength - 3) + '...';
+  } catch (e) {
+    // fallback for non-URL strings
+    return url.length <= maxLength ? url : url.slice(0, maxLength - 3) + '...';
+  }
+}
