@@ -60,12 +60,12 @@ function renderList(proposals) {
 
     const original = document.createElement('div');
     original.className = 'sub';
-    original.textContent = `original: ${p.originalAlt ? p.originalAlt : '(none)'}`;
+    original.textContent = ``;
 
     // optional small id/source row
     const small = document.createElement('div');
     small.className = 'small';
-    small.textContent = p.src ? truncateUrl(p.src, 60) : p.id || '';
+    small.textContent = '';
 
     meta.appendChild(proposed);
     meta.appendChild(original);
