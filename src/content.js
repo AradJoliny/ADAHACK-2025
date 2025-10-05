@@ -84,6 +84,7 @@ async function addAIGeneratedAlt(images) {
                 if (caption) {
                     img.setAttribute('alt', caption);
                     img.setAttribute('title', caption);
+                    img.setAttribute('data-ai-generated', 'true'); // mark as AI-generated
                     log(`AI generated: "${caption}"`);
                     
                     // Visual feedback
@@ -130,25 +131,52 @@ async function buildProposals({ onlyMissingAlt = true } = {}) {
         ]);
     }
 
+    function isAiGenerated(img) {
+    if (!img) return false;
+    // explicit attribute set when we add alt text
+    if (img.getAttribute('data-ai-generated') === 'true') return true;
+    // legacy/data-* flag for added records
+    if (img.dataset && img.dataset.aiAltAdded === 'true') return true;
+    // class-based marker (if you ever add a class)
+    if (img.classList && img.classList.contains('ai-generated-image')) return true;
+    // small heuristic: title/alt that contains "AI generated" (optional)
+    const title = (img.getAttribute('title') || '').toLowerCase();
+    if (title.includes('ai generated') || title.includes('ai-generated')) return true;
+    return false;
+}
+
     const proposals = [];
-    for (const img of images) {
-      const id = img.dataset.altId;
-      const src = img.currentSrc || img.src || '';
-      const originalAlt = img.getAttribute('alt') || '';
+for (const img of images) {
+    // Skip anything that's not an <img>
+    if (!img || img.tagName !== 'IMG') continue;
 
-      let proposedAlt = originalAlt;
-      if (!proposedAlt) {
+    // Use helper to check if image was already processed / tagged
+    if (isAiGenerated(img)) continue;
+
+    const id = img.dataset.altId;
+    const src = img.currentSrc || img.src || '';
+    const originalAlt = (img.getAttribute('alt') || '').trim();
+
+    let proposedAlt = originalAlt;
+    if (!proposedAlt) {
         try {
-          proposedAlt = (await generateAltTextFromBackend(src)) || '';
+            if (typeof withTimeout === 'function') {
+                proposedAlt = (await withTimeout(generateAltTextFromBackend(src), 1000)) || '';
+            } else {
+                proposedAlt = (await generateAltTextFromBackend(src)) || '';
+            }
         } catch (e) {
-          proposedAlt = '';
+            log(`generateAltTextFromBackend failed for ${src}: ${e.message}`);
+            proposedAlt = '';
         }
-      }
-
-      proposals.push({ id, src, originalAlt, proposedAlt });
     }
-    return proposals;
-  }
+
+    if (!originalAlt) {
+        proposals.push({ id, src, originalAlt, proposedAlt });
+    }
+}
+return proposals;
+}
 
   chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (!msg || !msg.type) return; // ignore unrelated messages
