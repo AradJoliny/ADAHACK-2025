@@ -111,6 +111,14 @@ async function buildProposals({ onlyMissingAlt = true } = {}) {
     const images = onlyMissingAlt ? findImagesMissingAlt() : Array.from(document.querySelectorAll('img'));
     ensureImageIds();
 
+    // helper: timeout wrapper to avoid blocking the popup
+    function withTimeout(promise, ms) {
+        return Promise.race([
+            promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+        ]);
+    }
+
     const proposals = [];
     for (const img of images) {
       const id = img.dataset.altId;

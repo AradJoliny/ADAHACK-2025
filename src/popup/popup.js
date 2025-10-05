@@ -1,7 +1,16 @@
-const statusEl = document.getElementById('status');
-const listEl = document.getElementById('list');
+let statusEl;
+let listEl;
 
-document.addEventListener('DOMContentLoaded', () =>{
+ document.addEventListener('DOMContentLoaded', () =>{
+    statusEl = document.getElementById('status');
+    listEl = document.getElementById('list');
+
+    // guard: ensure required elements exist
+    if (!statusEl || !listEl) {
+        console.error('popup: missing #status or #list in popup.html');
+        return;
+    }
+
     loadProposals();
 });
 
